@@ -1,8 +1,7 @@
 package com.aromano.bragiassignment.domain.model
 
-import kotlinx.serialization.Serializable
+import kotlinx.datetime.LocalDate
 
-@Serializable
 data class MovieDetails(
     val id: MovieId,
     val backdropPath: String?,
@@ -10,8 +9,8 @@ data class MovieDetails(
     val title: String,
     val voteAverage: Float,
     val voteCount: Int,
-    val genreIds: List<MovieGenreId>,
-    val releaseDate: String,
+    val genres: List<MovieGenre>,
+    val releaseDate: LocalDate,
 
     val budget: Dollars,
     val revenue: Dollars,

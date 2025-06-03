@@ -48,8 +48,8 @@ class FiltersViewModel(
     override fun mapViewState(state: FiltersModelState): FiltersViewState = FiltersViewState(
         commonState = state.commonState.toViewState(
             topBarViewState = TopBarViewState(
-                strings.getString(R.string.movie_list_topbar_title),
-                backEnabled = false,
+                strings.getString(R.string.filters_topbar_title),
+                backEnabled = true,
             )
         ),
         isLoading = state.isLoading,
