@@ -2,9 +2,11 @@ package com.aromano.bragiassignment.di
 
 import com.aromano.bragiassignment.data.DefaultMovieService
 import com.aromano.bragiassignment.data.datasourcesdef.Api
+import com.aromano.bragiassignment.domain.GetMovieDetailsUseCase
 import com.aromano.bragiassignment.domain.GetMovieGenresUseCase
 import com.aromano.bragiassignment.domain.GetMoviesByGenreUseCase
 import com.aromano.bragiassignment.domain.model.MovieGenreId
+import com.aromano.bragiassignment.domain.model.MovieId
 import com.aromano.bragiassignment.domain.servicesdef.MovieService
 import com.aromano.bragiassignment.network.KtorApi
 import com.aromano.bragiassignment.network.KtorClient
@@ -12,6 +14,8 @@ import com.aromano.bragiassignment.presentation.core.AndroidStringProvider
 import com.aromano.bragiassignment.presentation.core.StringProvider
 import com.aromano.bragiassignment.presentation.filters.FiltersArgs
 import com.aromano.bragiassignment.presentation.filters.FiltersViewModel
+import com.aromano.bragiassignment.presentation.moviedetails.MovieDetailsArgs
+import com.aromano.bragiassignment.presentation.moviedetails.MovieDetailsViewModel
 import com.aromano.bragiassignment.presentation.movielist.MovieListViewModel
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
@@ -50,6 +54,13 @@ val presentationModule = module {
         )
     }
 
+    viewModel { (movieId: MovieId) ->
+        MovieDetailsViewModel(
+            args = MovieDetailsArgs(movieId),
+            getMovieDetailsUseCase = get(),
+        )
+    }
+
 }
 
 val domainModule = module {
@@ -62,6 +73,12 @@ val domainModule = module {
 
     single {
         GetMovieGenresUseCase(
+            movieService = get(),
+        )
+    }
+
+    single {
+        GetMovieDetailsUseCase(
             movieService = get(),
         )
     }
