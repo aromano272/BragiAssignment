@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BragiAssignment</string>
+
+    <string name="error_unknown">Something went wrong</string>
+    <string name="error_network_unauthorized">Unauthorized</string>
+
+</resources>
