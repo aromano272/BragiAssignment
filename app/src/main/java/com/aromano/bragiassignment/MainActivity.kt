@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                         NavHost(
                             modifier = Modifier.padding(innerPadding),
                             navController = navController,
-                            startDestination = Nav.Test,
+                            startDestination = Nav.MovieList,
                         ) {
                             graph(navController)
                         }
