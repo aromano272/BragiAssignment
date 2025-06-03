@@ -109,7 +109,11 @@ class AndroidStringProvider(
      * stripped of styled text information.
      */
     @Throws(Resources.NotFoundException::class)
-    override fun getQuantityString(@PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String =
+    override fun getQuantityString(
+        @PluralsRes id: Int,
+        quantity: Int,
+        vararg formatArgs: Any,
+    ): String =
         resources.getQuantityString(id, quantity, *formatArgs)
 
     /**

@@ -16,7 +16,7 @@ interface Api {
 }
 
 class KtorApi(
-    ktorClient: KtorClient
+    ktorClient: KtorClient,
 ) : Api {
     private val client: HttpClient = ktorClient.client
 
@@ -41,7 +41,8 @@ private suspend inline fun <reified T> runCatchingAsOutcome(
             Outcome.Failure(ErrorKt.Network.Unauthorized)
         } else {
             try {
-                val errorBody = ex.response.call.bodyNullable(typeInfo<BaseErrorResponse>()) as BaseErrorResponse
+                val errorBody =
+                    ex.response.call.bodyNullable(typeInfo<BaseErrorResponse>()) as BaseErrorResponse
                 Outcome.Failure(ErrorKt.Network.Server(errorBody.message))
             } catch (errorEx: Exception) {
                 Outcome.Failure(ErrorKt.Network.ServerUnknown(ex))

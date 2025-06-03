@@ -39,10 +39,11 @@ suspend fun <T, R> Outcome<T>.mapSuccess(mapper: suspend (T) -> R): Outcome<R> =
     is Outcome.Failure -> this
 }
 
-suspend fun <T> Outcome<T>.mapFailure(mapper: suspend (ErrorType) -> ErrorType): Outcome<T> = when (this) {
-    is Outcome.Success -> this
-    is Outcome.Failure -> Outcome.Failure(mapper(error))
-}
+suspend fun <T> Outcome<T>.mapFailure(mapper: suspend (ErrorType) -> ErrorType): Outcome<T> =
+    when (this) {
+        is Outcome.Success -> this
+        is Outcome.Failure -> Outcome.Failure(mapper(error))
+    }
 
 suspend fun <T, R> Outcome<T>.flatMap(
     onSuccess: suspend (T) -> Outcome<R>,
@@ -52,21 +53,23 @@ suspend fun <T, R> Outcome<T>.flatMap(
     is Outcome.Failure -> onFailure(error)
 }
 
-suspend fun <T, R> Outcome<T>.flatMapSuccess(mapper: suspend (T) -> Outcome<R>): Outcome<R> = when (this) {
-    is Outcome.Success -> mapper(data)
-    is Outcome.Failure -> this
-}
+suspend fun <T, R> Outcome<T>.flatMapSuccess(mapper: suspend (T) -> Outcome<R>): Outcome<R> =
+    when (this) {
+        is Outcome.Success -> mapper(data)
+        is Outcome.Failure -> this
+    }
 
-suspend fun <T> Outcome<T>.flatMapFailure(mapper: suspend (ErrorType) -> Outcome<T>): Outcome<T> = when (this) {
-    is Outcome.Success -> this
-    is Outcome.Failure -> mapper(error)
-}
+suspend fun <T> Outcome<T>.flatMapFailure(mapper: suspend (ErrorType) -> Outcome<T>): Outcome<T> =
+    when (this) {
+        is Outcome.Success -> this
+        is Outcome.Failure -> mapper(error)
+    }
 
 suspend fun Outcome<*>.ignoreData(): Outcome<Unit> = mapSuccess { }
 
 suspend fun <T1, T2> zipOutcomesTogether(
     t1func: suspend () -> Outcome<T1>,
-    t2func: suspend () -> Outcome<T2>
+    t2func: suspend () -> Outcome<T2>,
 ): Outcome<Pair<T1, T2>> = zipOutcomes(t1func, t2func) { t1, t2 ->
     t1 to t2
 }
@@ -74,7 +77,7 @@ suspend fun <T1, T2> zipOutcomesTogether(
 suspend fun <T1, T2, R> zipOutcomes(
     t1func: suspend () -> Outcome<T1>,
     t2func: suspend () -> Outcome<T2>,
-    mapper: (T1, T2) -> R
+    mapper: (T1, T2) -> R,
 ): Outcome<R> = coroutineScope {
     val t1 = async { t1func() }
     val t2 = async { t2func() }
@@ -102,7 +105,7 @@ suspend fun <T1, T2, T3, R> zipOutcomes(
     t1func: suspend () -> Outcome<T1>,
     t2func: suspend () -> Outcome<T2>,
     t3func: suspend () -> Outcome<T3>,
-    mapper: (T1, T2, T3) -> R
+    mapper: (T1, T2, T3) -> R,
 ): Outcome<R> = coroutineScope {
     val t1 = async { t1func() }
     val t2 = async { t2func() }
@@ -115,7 +118,8 @@ suspend fun <T1, T2, T3, R> zipOutcomes(
     if (t1Result is Outcome.Success && t2Result is Outcome.Success && t3Result is Outcome.Success) {
         Outcome.Success(mapper(t1Result.data, t2Result.data, t3Result.data))
     } else {
-        val firstError = (t1Result as? Outcome.Failure) ?: (t2Result as? Outcome.Failure) ?: (t3Result as? Outcome.Failure)!!
+        val firstError = (t1Result as? Outcome.Failure) ?: (t2Result as? Outcome.Failure)
+        ?: (t3Result as? Outcome.Failure)!!
         firstError
     }
 }

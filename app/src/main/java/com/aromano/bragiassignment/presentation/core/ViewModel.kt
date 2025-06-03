@@ -35,7 +35,7 @@ data class CommonModelState(
     val successAlert: String? = null,
 ) {
     fun toViewState(
-        topBarViewState: TopBarViewState? = null
+        topBarViewState: TopBarViewState? = null,
     ): CommonViewState = CommonViewState(
         topBarViewState = topBarViewState,
         errorAlert = errorAlert,
@@ -114,9 +114,11 @@ abstract class BaseViewModel<
         get() = modelStateFlow.value
 
     private val _viewStateFlow by lazy { MutableStateFlow(mapViewState(initialModelState)) }
-//    final override val viewStateFlow: StateFlow<TViewState> = _viewStateFlow
+
+    //    final override val viewStateFlow: StateFlow<TViewState> = _viewStateFlow
     final override val viewStateFlow: StateFlow<TViewState> by lazy {
-        modelStateFlow.map { mapViewState(it) }.stateIn(viewModelScope, SharingStarted.Lazily, mapViewState(initialModelState))
+        modelStateFlow.map { mapViewState(it) }
+            .stateIn(viewModelScope, SharingStarted.Lazily, mapViewState(initialModelState))
     }
 
     private val _navigationFlow = MutableSharedFlow<NavigationEvent<TNavigation>>(replay = 10)
@@ -156,6 +158,7 @@ abstract class BaseViewModel<
     final override fun launch(func: suspend CoroutineScope.(currentState: TModelState) -> Unit) {
         viewModelScope.launch { func(modelState) }
     }
+
     final override fun launchJob(
         func: suspend CoroutineScope.(currentState: TModelState) -> Unit,
     ): Job = viewModelScope.launch { func(modelState) }
@@ -224,12 +227,13 @@ abstract class BaseViewModel<
 interface Args
 interface Intent
 interface ModelState
+
 @Stable
 interface ViewState
 interface Navigation
 
 class NavigationEvent<TNavigation : Navigation>(
-    val navigation: TNavigation
+    val navigation: TNavigation,
 ) {
     var wasHandled: Boolean = false
         private set
