@@ -2,7 +2,6 @@ package com.aromano.bragiassignment.presentation.movielist
 
 import com.aromano.bragiassignment.domain.core.ErrorKt
 import com.aromano.bragiassignment.domain.model.Movie
-import com.aromano.bragiassignment.domain.model.MovieGenre
 import com.aromano.bragiassignment.domain.model.MovieGenreId
 import com.aromano.bragiassignment.domain.model.MovieId
 import com.aromano.bragiassignment.presentation.core.Args
@@ -28,7 +27,7 @@ data class MovieListModelState(
     override val commonState: CommonModelState,
     val isLoading: Boolean,
     val error: ErrorKt?,
-    val selectedGenre: MovieGenre?,
+    val selectedGenreId: MovieGenreId?,
     val movies: List<Movie>?,
 ) : ModelStateWithCommonState<MovieListModelState> {
 
@@ -41,7 +40,7 @@ data class MovieListModelState(
             commonState = CommonModelState(),
             isLoading = false,
             error = null,
-            selectedGenre = null,
+            selectedGenreId = null,
             movies = null,
         )
     }
@@ -59,6 +58,7 @@ sealed interface MovieListIntent : Intent {
     data object RefreshClicked : MovieListIntent
     data object FiltersClicked : MovieListIntent
     data class MovieClicked(val movieId: MovieId) : MovieListIntent
+    data class SelectedGenreChanged(val genreId: MovieGenreId?) : MovieListIntent
 }
 
 sealed interface MovieListNavigation : Navigation {

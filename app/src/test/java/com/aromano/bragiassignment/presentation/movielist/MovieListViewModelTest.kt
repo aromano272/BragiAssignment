@@ -7,6 +7,7 @@ import com.aromano.bragiassignment.domain.core.Outcome
 import com.aromano.bragiassignment.domain.model.Movie
 import com.aromano.bragiassignment.utils.BaseTest
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
@@ -36,8 +37,7 @@ class MovieListViewModelTest : BaseTest() {
         coEvery { getMoviesByGenreUseCase.execute(any()) }.coAnswers { moviesDeferred.await() }
 
         viewModel.viewStateFlow.test {
-            expectMostRecentItem()
-            awaitItem().run {
+            expectMostRecentItem().run {
                 assertNull(movies)
                 assertTrue(isLoading)
             }
@@ -65,6 +65,36 @@ class MovieListViewModelTest : BaseTest() {
                 assertNull(movies)
                 assertFalse(isLoading)
                 assertNotNull(fullScreenError)
+            }
+        }
+    }
+
+    @Test
+    fun `WHEN selected genre changes THEN fetch data`() = runTest {
+        viewModel.viewStateFlow.test {
+            expectMostRecentItem()
+
+            val genreId = 7
+            val newMovies = MOCK_MOVIES.map { it.copy(it.id + 100) }
+            val moviesDeferred = CompletableDeferred<Outcome<List<Movie>>>()
+            coEvery { getMoviesByGenreUseCase.execute(genreId) }.coAnswers { moviesDeferred.await() }
+
+            viewModel.onIntent(MovieListIntent.SelectedGenreChanged(genreId))
+
+            awaitItem().run {
+                assertNull(movies)
+                assertTrue(isGenreSelected)
+            }
+            awaitItem().run {
+                assertTrue(isLoading)
+            }
+
+            moviesDeferred.complete(Outcome.Success(newMovies))
+            coVerify { getMoviesByGenreUseCase.execute(genreId) }
+
+            awaitItem().run {
+                assertEquals(newMovies, movies)
+                assertFalse(isLoading)
             }
         }
     }

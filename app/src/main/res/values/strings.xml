@@ -6,5 +6,6 @@
     <string name="movie_grid_item_rating">Rating: %.2f</string>
     <string name="movie_list_filter_button">Filters</string>
     <string name="movie_list_topbar_title">Movies</string>
+    <string name="filters_clear_filter">Clean filter</string>
 
 </resources>
