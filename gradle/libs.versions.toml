@@ -1,6 +1,7 @@
 [versions]
 compileSdk = "34"
 minSdk = "24"
+slf4jSimple = "2.0.16"
 targetSdk = "34"
 agp = "8.5.0"
 kotlin = "1.9.0"
@@ -22,10 +23,11 @@ navigation = "2.8.0"
 coil = "2.7.0"
 ktor = "2.3.11"
 slf4j = "1.7.36"
-mockk = "1.13.11"
+mockk = "1.14.2"
 turbine = "1.1.0"
 
 [libraries]
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,6 +49,7 @@ kotlinx-time = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", ver
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }

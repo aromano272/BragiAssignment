@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,13 +26,17 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.aromano.bragiassignment.R
 import com.aromano.bragiassignment.domain.model.Movie
+import com.aromano.bragiassignment.presentation.core.CommonViewState
 import com.aromano.bragiassignment.presentation.movielist.MovieListIntent
 import com.aromano.bragiassignment.presentation.movielist.MovieListViewState
 import com.aromano.bragiassignment.ui.core.Spacing
+import kotlinx.datetime.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,8 +102,12 @@ private fun MovieGridItem(
             verticalArrangement = Arrangement.spacedBy(Spacing.dp4)
         ) {
             AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(.8f),
                 model = movie.posterPath ?: movie.backdropPath,
                 contentDescription = movie.title,
+                contentScale = ContentScale.Crop,
             )
 
             Text(
@@ -120,4 +129,54 @@ private fun MovieGridItem(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun PreviewScreen() {
+    val movie = Movie(
+        id = 1,
+        backdropPath = "https://picsum.photos/200/300",
+        posterPath = "https://picsum.photos/200/300",
+        title = "Title 1",
+        voteAverage = 4.5f,
+        voteCount = 120,
+        genreIds = listOf(),
+        releaseDate = LocalDate(2025, 1, 1),
+    )
+    val movies: List<Movie> = buildList {
+        repeat(10) {
+            add(movie.copy(id = it))
+        }
+    }
+    val state = MovieListViewState(
+        commonState = CommonViewState(),
+        isLoading = false,
+        fullScreenError = null,
+        isGenreSelected = false,
+        movies = movies,
+    )
+    MovieListScreen(
+        state = state,
+        onIntent = {},
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewMovieGridItem() {
+    val movie = Movie(
+        id = 1,
+        backdropPath = "https://picsum.photos/200/300",
+        posterPath = "https://picsum.photos/200/300",
+        title = "Title 1",
+        voteAverage = 4.5f,
+        voteCount = 120,
+        genreIds = listOf(),
+        releaseDate = LocalDate(2025, 1, 1),
+    )
+    MovieGridItem(
+        movie = movie,
+        onIntent = {},
+    )
 }

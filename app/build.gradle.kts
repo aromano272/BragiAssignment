@@ -18,6 +18,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -45,9 +46,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-
-        // TODO: prod readiness 
-        freeCompilerArgs += "-Xdebug"
     }
     buildFeatures {
         compose = true
@@ -96,8 +94,12 @@ dependencies {
     implementation(libs.koin.androidx.compose)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlin.test)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.mockk)
+    testImplementation(libs.mockk) {
+        exclude(group = "org.slf4j", module = "slf4j-android")
+    }
+    testImplementation(libs.slf4j.simple)
     testImplementation(libs.turbine)
 
     androidTestImplementation(libs.androidx.junit)
