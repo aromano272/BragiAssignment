@@ -49,6 +49,7 @@ network      # DTO models, Api and Http client
 - **Kotlin 1.9.0**
 - **Android SDK 34**
 - **Minimum SDK: 24**
+- **Add your TMDB Token to local.properties**
 
 ## 🧪 Testing
 
