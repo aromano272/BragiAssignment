@@ -1,12 +1,10 @@
 package com.aromano.bragiassignment.presentation.movielist
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.aromano.bragiassignment.domain.GetMoviesByGenreUseCase
 import com.aromano.bragiassignment.domain.core.ErrorKt
 import com.aromano.bragiassignment.domain.core.Outcome
 import com.aromano.bragiassignment.domain.model.Movie
-import com.aromano.bragiassignment.domain.model.MovieGenre
 import com.aromano.bragiassignment.utils.BaseTest
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -26,8 +24,6 @@ class MovieListViewModelTest : BaseTest() {
     private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase = mockk {
         coEvery { execute(any()) }.returns(Outcome.Success(MOCK_MOVIES))
     }
-
-    private val savedStateHandle = SavedStateHandle()
 
     private val viewModel: MovieListViewModel by lazy {
         MovieListViewModel(

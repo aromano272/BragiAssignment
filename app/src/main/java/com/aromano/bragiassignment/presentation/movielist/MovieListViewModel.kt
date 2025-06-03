@@ -62,8 +62,10 @@ class MovieListViewModel(
             MovieListIntent.RefreshClicked -> loadData()
             MovieListIntent.FiltersClicked ->
                 navigate(MovieListNavigation.GoToFilters(state.selectedGenreId))
+
             is MovieListIntent.MovieClicked ->
                 navigate(MovieListNavigation.GoToMovieDetails(intent.movieId))
+
             is MovieListIntent.SelectedGenreChanged -> {
                 if (state.selectedGenreId == intent.genreId) return
                 updateState { it.copy(selectedGenreId = intent.genreId, movies = null) }
