@@ -45,6 +45,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+
+        // TODO: prod readiness 
+        freeCompilerArgs += "-Xdebug"
     }
     buildFeatures {
         compose = true

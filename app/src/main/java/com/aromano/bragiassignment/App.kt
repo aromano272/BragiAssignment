@@ -3,6 +3,7 @@ package com.aromano.bragiassignment
 import android.app.Application
 import com.aromano.bragiassignment.di.appModule
 import com.aromano.bragiassignment.di.dataModule
+import com.aromano.bragiassignment.di.domainModule
 import com.aromano.bragiassignment.di.presentationModule
 import com.aromano.bragiassignment.di.remoteModule
 import org.koin.android.ext.koin.androidContext
@@ -20,8 +21,9 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 appModule,
-                dataModule,
                 presentationModule,
+                domainModule,
+                dataModule,
                 remoteModule,
             )
         }
