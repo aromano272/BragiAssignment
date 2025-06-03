@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -19,6 +21,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Provide your own key in local.properties
+        buildConfigField(
+            "String",
+            "TMDB_API_KEY",
+            "\"${gradleLocalProperties(rootDir, providers).getProperty("TMDB_API_KEY")}\""
+        )
     }
 
     buildTypes {
@@ -39,6 +48,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get().toString()
