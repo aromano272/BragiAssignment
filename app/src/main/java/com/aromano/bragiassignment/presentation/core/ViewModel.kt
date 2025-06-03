@@ -97,7 +97,6 @@ abstract class BaseViewModel<
         TViewState : ViewState,
         TNavigation : Navigation,
         >(
-    args: TArgs,
     initialModelState: TModelState,
 ) : ViewModel<
         TArgs,

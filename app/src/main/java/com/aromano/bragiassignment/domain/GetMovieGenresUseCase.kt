@@ -6,10 +6,10 @@ import com.aromano.bragiassignment.domain.model.MovieGenre
 import com.aromano.bragiassignment.domain.servicesdef.MovieService
 
 class GetMovieGenresUseCase(
-    private val repo: MovieService,
+    private val movieService: MovieService,
 ) : UseCase<Unit, List<MovieGenre>> {
 
     override suspend fun execute(req: Unit): Outcome<List<MovieGenre>> =
-        repo.getMovieGenres()
+        movieService.getMovieGenres()
 
 }

@@ -18,7 +18,6 @@ class MovieListViewModel(
         MovieListViewState,
         MovieListNavigation,
         >(
-    args = MovieListArgs,
     initialModelState = MovieListModelState.initial
 ), MovieListContract {
 
@@ -31,7 +30,7 @@ class MovieListViewModel(
         loadDataJob?.cancel()
         loadDataJob = launchJob {
             updateState { it.copy(isLoading = true) }
-            getMoviesByGenreUseCase.execute(modelState.selectedGenre?.id)
+            getMoviesByGenreUseCase.execute(modelState.selectedGenreId)
                 .doOnSuccess { movies ->
                     updateState { it.copy(isLoading = false, movies = movies) }
                 }.doOnFailure { error ->
@@ -54,7 +53,7 @@ class MovieListViewModel(
         ),
         isLoading = state.isLoading,
         fullScreenError = state.error?.message,
-        isGenreSelected = state.selectedGenre != null,
+        isGenreSelected = state.selectedGenreId != null,
         movies = state.movies,
     )
 
@@ -62,10 +61,14 @@ class MovieListViewModel(
         when (intent) {
             MovieListIntent.RefreshClicked -> loadData()
             MovieListIntent.FiltersClicked ->
-                navigate(MovieListNavigation.GoToFilters(state.selectedGenre?.id))
-
+                navigate(MovieListNavigation.GoToFilters(state.selectedGenreId))
             is MovieListIntent.MovieClicked ->
                 navigate(MovieListNavigation.GoToMovieDetails(intent.movieId))
+            is MovieListIntent.SelectedGenreChanged -> {
+                if (state.selectedGenreId == intent.genreId) return
+                updateState { it.copy(selectedGenreId = intent.genreId, movies = null) }
+                loadData()
+            }
         }
     }
 
